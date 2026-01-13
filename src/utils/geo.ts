@@ -7,7 +7,7 @@ export function processPolygon(newPoly: any, existing: any[]) {
       throw new Error("ENCLOSE")
     }
     if (turf.booleanOverlap(result, e)) {
-      const diff = turf.difference(result, e)
+      const diff = turf.difference(turf.featureCollection([result, e]))
       if (!diff) return null
       result = diff
     }
