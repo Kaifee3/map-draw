@@ -1,73 +1,128 @@
-# React + TypeScript + Vite
+OPENSTREETMAP DRAWING APPLICATION
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a frontend web application built using React.js and TypeScript.
+It renders OpenStreetMap tiles and allows users to draw different geometrical shapes on the map while enforcing spatial rules.
+All drawn shapes can be exported as a GeoJSON file.
 
-Currently, two official plugins are available:
+TECH STACK USED
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> React.js with TypeScript
+> React Leaflet & Leaflet Dra
+> Turf.js for spatial operations
+> Zustand for state management
+> Vite for project setup
 
-## React Compiler
+SETUP AND RUN INSTRUCTIONS
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Clone the repository
 
-## Expanding the ESLint configuration
+git clone https://github.com/kaifee3/map-draw.git
+cd osm-draw
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install dependencies
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Run the project
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm run dev
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open in browser
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+http://localhost:5173
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+APPLICATION FEATURES
+
+OpenStreetMap base layer with zoom and pan
+
+Drawing tools for:
+
+> Polygon
+> Rectangle
+> Circle
+> LineString
+> Polygon overlap handling
+> LineStrings are allowed to cross any shape
+> Export all drawn shapes as GeoJSON
+> Clean and modular project structure
+> POLYGON OVERLAP LOGIC EXPLANATION
+> Polygon overlap handling is implemented using Turf.js.
+
+Rules applied:
+
+> Polygon, Rectangle, and Circle are treated as polygonal shapes
+> These shapes are not allowed to overlap with existing polygonal shapes
+> If a new polygon partially overlaps an existing one, the overlapping area is removed automatically
+> If a new polygon completely encloses an existing polygon, the action is blocked and an error is shown
+> LineString is excluded from all overlap rules and can freely cross any shape
+
+Logic flow:
+
+> When a shape is drawn, it is converted into GeoJSON
+> Existing polygonal shapes are fetched from the global state
+> If the new polygon fully contains an existing polygon, drawing is rejected
+> If the new polygon partially overlaps, the overlapping area is removed using Turf.js difference
+> If the result is valid, the shape is added to the state
+
+Turf.js functions used:
+
+1 booleanContains
+
+2 booleanOverlap
+
+3. difference
+
+GEOJSON EXPORT
+
+The Export button downloads all drawn shapes as a GeoJSON file.
+
+Sample exported GeoJSON:
+
+{
+"type": "FeatureCollection",
+"features": [
+{
+"type": "Feature",
+"id": "a1b2c3d4",
+"geometry": {
+"type": "Polygon",
+"coordinates": [
+[
+[77.1, 28.6],
+[77.3, 28.6],
+[77.3, 28.8],
+[77.1, 28.8],
+[77.1, 28.6]
+]
+]
+},
+"properties": {
+"shapeType": "polygon"
+}
+}
+]
+}
+
+PROJECT STRUCTURE
+
+src
+├── components
+│ ├── MapView.tsx
+│ └── Toolbar.tsx
+├── store
+│ └── mapStore.ts
+├── utils
+│ └── geometry.ts
+├── config
+│ └── limits.ts
+├── App.tsx
+└── main.tsx
+
+POSSIBLE IMPROVEMENTS
+
+> Shape editing and deletion
+> Better UI notifications instead of alerts
+> Undo and redo support
+> Backend storage for GeoJSON
+> Shape limit indicators
+
