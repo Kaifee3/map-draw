@@ -107,12 +107,12 @@ PROJECT STRUCTURE
 
 src
 ├── components
-│ ├── MapView.tsx
-│ └── Toolbar.tsx
+│ ├── MapV.tsx
+│ └── ToolB.tsx
 ├── store
-│ └── mapStore.ts
+│ └── map.ts
 ├── utils
-│ └── geometry.ts
+│ └── geo.ts
 ├── config
 │ └── limits.ts
 ├── App.tsx
