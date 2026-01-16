@@ -1,18 +1,34 @@
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
 import { useMapStore } from "../store/map"
-import { processPolygon } from "../utils/geo"
+import { processPolygon } from "../store/geo"
 
 export default function MapView() {
   const addFeature = useMapStore((s) => s.addFeature)
   const features = useMapStore((s) => s.features)
 
   const onCreate = (e: any) => {
-    const geo = e.layer.toGeoJSON()
+    const layer = e.layer
+
+    if (e.layerType === "rectangle") {
+      const bounds = layer.getBounds()
+      const expanded = bounds.pad(125.125)
+      layer.setBounds(expanded)
+    }
+
+    if (e.layerType === "circle") {
+      const r = layer.getRadius()
+      layer.setRadius(r * 1.5)
+    }
+
+    const geo = layer.toGeoJSON()
     geo.id = crypto.randomUUID()
 
     if (e.layerType !== "polyline") {
-      const existing = features.filter(f => f.geometry.type !== "LineString")
+      const existing = features.filter(
+        f => f.geometry.type !== "LineString"
+      )
+
       try {
         const processed = processPolygon(geo as any, existing as any)
         if (!processed) return

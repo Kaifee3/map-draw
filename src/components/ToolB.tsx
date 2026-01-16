@@ -14,7 +14,7 @@ export default function Toolbar() {
   }
 
   return (
-    <div style={{ width: 120, background: "#111", color: "#fff", padding: 10 }}>
+    <div style={{ width: 120, background: "#0d0c0c", color: "#fff", padding: 10 }}>
       <h4>Tools</h4>
       <button onClick={exportGeoJSON}>Export</button>
     </div>
