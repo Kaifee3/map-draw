@@ -111,7 +111,6 @@ src
 │ └── ToolB.tsx
 ├── store
 │ └── map.ts
-├── utils
 │ └── geo.ts
 ├── config
 │ └── limits.ts
